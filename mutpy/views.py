@@ -4,6 +4,7 @@ import inspect
 import os
 import traceback
 from difflib import unified_diff
+import sys
 
 import jinja2
 import yaml
@@ -133,6 +134,7 @@ class TextView(QuietTextView):
             if mutation != mutations[-1]:
                 print()
             if self.show_mutants:
+                self.save_mutant(codegen.to_source(mutant), module.__name__)
                 self.print_code(mutant, ast.parse(inspect.getsource(module)))
 
     def cant_load(self, name, exception):
@@ -153,6 +155,12 @@ class TextView(QuietTextView):
         diff = [self.decorate(line, 'blue') if line.startswith('- ') else line for line in diff]
         diff = [self.decorate(line, 'green') if line.startswith('+ ') else line for line in diff]
         print("\n{}\n".format('-' * 80) + "\n".join(diff) + "\n{}".format('-' * 80))
+
+    def save_mutant(self, mutant_src, module_name):
+        h = hash(mutant_src) % ((sys.maxsize + 1) * 2)
+        with open(f'{"/".join(module_name.split(".")[:-1])}/m{h}.py', 'w') as mutant_file:
+            mutant_file.write(mutant_src)
+        os.system(f'echo m{h} >> mutant_status.txt')
 
     @staticmethod
     def _create_diff(mutant_src, original_src):

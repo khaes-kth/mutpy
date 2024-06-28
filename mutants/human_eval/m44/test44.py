@@ -1,0 +1,23 @@
+from mutants.human_eval.m44.src44 import change_base
+
+
+METADATA = {}
+
+
+def check(candidate):
+    assert candidate(8, 3) == "22"
+    assert candidate(9, 3) == "100"
+    assert candidate(234, 2) == "11101010"
+    assert candidate(16, 2) == "10000"
+    assert candidate(8, 2) == "1000"
+    assert candidate(7, 2) == "111"
+    for x in range(2, 8):
+        assert candidate(x, x + 1) == str(x)
+
+
+from unittest import TestCase 
+class CalculatorTest(TestCase): 
+	
+	# test case for checking non prime nums 
+	def test(self): 
+		check(change_base)

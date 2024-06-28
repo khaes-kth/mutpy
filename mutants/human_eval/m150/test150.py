@@ -1,0 +1,25 @@
+from mutants.human_eval.m150.src150 import x_or_y
+def check(candidate):
+
+    # Check some simple cases
+    assert candidate(7, 34, 12) == 34
+    assert candidate(15, 8, 5) == 5
+    assert candidate(3, 33, 5212) == 33
+    assert candidate(1259, 3, 52) == 3
+    assert candidate(7919, -1, 12) == -1
+    assert candidate(3609, 1245, 583) == 583
+    assert candidate(91, 56, 129) == 129
+    assert candidate(6, 34, 1234) == 1234
+    
+
+    # Check some edge cases that are easy to work out by hand.
+    assert candidate(1, 2, 0) == 0
+    assert candidate(2, 2, 0) == 2
+
+
+from unittest import TestCase 
+class CalculatorTest(TestCase): 
+	
+	# test case for checking non prime nums 
+	def test(self): 
+		check(x_or_y)

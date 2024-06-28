@@ -1,0 +1,28 @@
+from mutants.human_eval.m132.src132 import is_nested
+def check(candidate):
+
+    # Check some simple cases
+    assert candidate('[[]]') == True, "This prints if this assert fails 1 (good for debugging!)"
+    assert candidate('[]]]]]]][[[[[]') == False
+    assert candidate('[][]') == False
+    assert candidate(('[]')) == False
+    assert candidate('[[[[]]]]') == True
+    assert candidate('[]]]]]]]]]]') == False
+    assert candidate('[][][[]]') == True
+    assert candidate('[[]') == False
+    assert candidate('[]]') == False
+    assert candidate('[[]][[') == True
+    assert candidate('[[][]]') == True
+
+    # Check some edge cases that are easy to work out by hand.
+    assert candidate('') == False, "This prints if this assert fails 2 (also good for debugging!)"
+    assert candidate('[[[[[[[[') == False
+    assert candidate(']]]]]]]]') == False
+
+
+from unittest import TestCase 
+class CalculatorTest(TestCase): 
+	
+	# test case for checking non prime nums 
+	def test(self): 
+		check(is_nested)

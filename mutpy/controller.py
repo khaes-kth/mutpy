@@ -1,6 +1,7 @@
 import random
 import sys
 import time
+import os
 
 from mutpy import views, utils
 
@@ -67,10 +68,12 @@ class MutationController(views.ViewNotifier):
             self.notify_end(self.score, timer.stop())
         except TestsFailAtOriginal as error:
             self.notify_original_tests_fail(error.result)
-            sys.exit(-1)
+            # sys.exit(-1)
+            raise Exception('TestsFailAtOriginal')
         except utils.ModulesLoaderException as error:
             self.notify_cant_load(error.name, error.exception)
-            sys.exit(-2)
+            # sys.exit(-2)
+            raise Exception('ModulesLoaderException')
 
     def run_mutation_process(self):
         try:
@@ -150,12 +153,16 @@ class MutationController(views.ViewNotifier):
     def update_score_and_notify_views(self, result, mutant_duration):
         if not result:
             self.update_timeout_mutant(mutant_duration)
+            os.system(f'echo "Timeout" >> mutant_status.txt')
         elif result.is_incompetent:
             self.update_incompetent_mutant(result, mutant_duration)
+            os.system(f'echo "Incompetent" >> mutant_status.txt')
         elif result.is_survived:
             self.update_survived_mutant(result, mutant_duration)
+            os.system(f'echo "Survived" >> mutant_status.txt')
         else:
             self.update_killed_mutant(result, mutant_duration)
+            os.system(f'echo "Killed" >> mutant_status.txt')
 
     def update_timeout_mutant(self, duration):
         self.notify_timeout(duration)
